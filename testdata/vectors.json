@@ -1,0 +1,547 @@
+{
+  "protocol": "cantcp",
+  "version": "v0",
+  "config": {
+    "magic": "c33c",
+    "crc_poly": 7,
+    "crc_cover": "magic+type+frame"
+  },
+  "crc8": [
+    {
+      "name": "empty input",
+      "poly": 7,
+      "input": "",
+      "sum": 0
+    },
+    {
+      "name": "check string",
+      "poly": 7,
+      "input": "313233343536373839",
+      "sum": 244
+    },
+    {
+      "name": "custom polynomial",
+      "poly": 29,
+      "input": "313233343536373839",
+      "sum": 55
+    }
+  ],
+  "frames": [
+    {
+      "name": "classic frame",
+      "raw": "2301000002000000dead000000000000",
+      "fields": {
+        "type": "classic",
+        "id": 291,
+        "flags": [],
+        "data": "dead"
+      },
+      "canonical": "2301000002000000dead000000000000",
+      "error": ""
+    },
+    {
+      "name": "classic extended rtr frame",
+      "raw": "debc1ac0000000000000000000000000",
+      "fields": {
+        "type": "classic",
+        "id": 1752286,
+        "flags": [
+          "eff",
+          "rtr"
+        ],
+        "data": ""
+      },
+      "canonical": "debc1ac0000000000000000000000000",
+      "error": ""
+    },
+    {
+      "name": "classic error frame",
+      "raw": "2301002001000000aa00000000000000",
+      "fields": {
+        "type": "classic",
+        "id": 291,
+        "flags": [
+          "err"
+        ],
+        "data": "aa"
+      },
+      "canonical": "2301002001000000aa00000000000000",
+      "error": ""
+    },
+    {
+      "name": "classic max payload",
+      "raw": "ff070000080000000001020304050607",
+      "fields": {
+        "type": "classic",
+        "id": 2047,
+        "flags": [],
+        "data": "0001020304050607"
+      },
+      "canonical": "ff070000080000000001020304050607",
+      "error": ""
+    },
+    {
+      "name": "canonical data tail",
+      "raw": "2301000002000000deadffffffffffff",
+      "fields": {
+        "type": "classic",
+        "id": 291,
+        "flags": [],
+        "data": "dead"
+      },
+      "canonical": "2301000002000000dead000000000000",
+      "error": ""
+    },
+    {
+      "name": "can fd frame",
+      "raw": "230100000403000001020304000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "fields": {
+        "type": "fd",
+        "id": 291,
+        "flags": [
+          "brs",
+          "esi"
+        ],
+        "data": "01020304"
+      },
+      "canonical": "230100000403000001020304000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "error": ""
+    },
+    {
+      "name": "can fd extended full payload",
+      "raw": "debc1a8040000000000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f",
+      "fields": {
+        "type": "fd",
+        "id": 1752286,
+        "flags": [
+          "eff"
+        ],
+        "data": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f"
+      },
+      "canonical": "debc1a8040000000000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f",
+      "error": ""
+    },
+    {
+      "name": "can fd dlc length 12",
+      "raw": "230100000c000000000102030405060708090a0b00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "fields": {
+        "type": "fd",
+        "id": 291,
+        "flags": [],
+        "data": "000102030405060708090a0b"
+      },
+      "canonical": "230100000c000000000102030405060708090a0b00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "error": ""
+    },
+    {
+      "name": "classic dlc above 8",
+      "raw": "23010000090000000000000000000000",
+      "fields": {
+        "type": "",
+        "id": 0,
+        "flags": [],
+        "data": ""
+      },
+      "canonical": "",
+      "error": "ErrBadDLC"
+    },
+    {
+      "name": "can fd len above 64",
+      "raw": "230100004100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "fields": {
+        "type": "",
+        "id": 0,
+        "flags": [],
+        "data": ""
+      },
+      "canonical": "",
+      "error": "ErrBadLen"
+    },
+    {
+      "name": "can fd non dlc length",
+      "raw": "230100000900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "fields": {
+        "type": "",
+        "id": 0,
+        "flags": [],
+        "data": ""
+      },
+      "canonical": "",
+      "error": "ErrBadLen"
+    },
+    {
+      "name": "can fd unknown flags",
+      "raw": "230100000480000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "fields": {
+        "type": "",
+        "id": 0,
+        "flags": [],
+        "data": ""
+      },
+      "canonical": "",
+      "error": "ErrBadFlags"
+    },
+    {
+      "name": "can fd rtr",
+      "raw": "230100400400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "fields": {
+        "type": "",
+        "id": 0,
+        "flags": [],
+        "data": ""
+      },
+      "canonical": "",
+      "error": "ErrBadFlags"
+    },
+    {
+      "name": "classic reserved byte",
+      "raw": "23010000000001000000000000000000",
+      "fields": {
+        "type": "",
+        "id": 0,
+        "flags": [],
+        "data": ""
+      },
+      "canonical": "",
+      "error": "ErrReserved"
+    },
+    {
+      "name": "can fd reserved byte",
+      "raw": "230100000400000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "fields": {
+        "type": "",
+        "id": 0,
+        "flags": [],
+        "data": ""
+      },
+      "canonical": "",
+      "error": "ErrReserved"
+    },
+    {
+      "name": "classic identifier above sff",
+      "raw": "00080000000000000000000000000000",
+      "fields": {
+        "type": "",
+        "id": 0,
+        "flags": [],
+        "data": ""
+      },
+      "canonical": "",
+      "error": "ErrBadID"
+    },
+    {
+      "name": "classic error frame 29 bit class",
+      "raw": "debc1a20000000000000000000000000",
+      "fields": {
+        "type": "classic",
+        "id": 1752286,
+        "flags": [
+          "err"
+        ],
+        "data": ""
+      },
+      "canonical": "debc1a20000000000000000000000000",
+      "error": ""
+    },
+    {
+      "name": "classic error frame with eff",
+      "raw": "230100a0000000000000000000000000",
+      "fields": {
+        "type": "",
+        "id": 0,
+        "flags": [],
+        "data": ""
+      },
+      "canonical": "",
+      "error": "ErrBadFlags"
+    },
+    {
+      "name": "classic error frame with rtr",
+      "raw": "23010060000000000000000000000000",
+      "fields": {
+        "type": "",
+        "id": 0,
+        "flags": [],
+        "data": ""
+      },
+      "canonical": "",
+      "error": "ErrBadFlags"
+    },
+    {
+      "name": "can fd error frame with eff",
+      "raw": "230100a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "fields": {
+        "type": "",
+        "id": 0,
+        "flags": [],
+        "data": ""
+      },
+      "canonical": "",
+      "error": "ErrBadFlags"
+    },
+    {
+      "name": "frame of 15 bytes",
+      "raw": "000000000000000000000000000000",
+      "fields": {
+        "type": "",
+        "id": 0,
+        "flags": [],
+        "data": ""
+      },
+      "canonical": "",
+      "error": "ErrFrameLen"
+    },
+    {
+      "name": "frame of 73 bytes",
+      "raw": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "fields": {
+        "type": "",
+        "id": 0,
+        "flags": [],
+        "data": ""
+      },
+      "canonical": "",
+      "error": "ErrFrameLen"
+    }
+  ],
+  "packets": [
+    {
+      "name": "empty stream",
+      "stream": "",
+      "frames": [],
+      "stats": {
+        "skipped": 0,
+        "dropped": 0,
+        "bad_type": 0,
+        "bad_dlc": 0,
+        "bad_len": 0,
+        "truncated": 0
+      },
+      "error": "",
+      "bad_frame_policy": ""
+    },
+    {
+      "name": "classic packet",
+      "stream": "c33c0100000000080000000102030405060708bc",
+      "frames": [
+        "00000000080000000102030405060708"
+      ],
+      "stats": {
+        "skipped": 0,
+        "dropped": 0,
+        "bad_type": 0,
+        "bad_dlc": 0,
+        "bad_len": 0,
+        "truncated": 0
+      },
+      "error": "",
+      "bad_frame_policy": ""
+    },
+    {
+      "name": "can fd packet",
+      "stream": "c33c02000000004000000001020300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d4",
+      "frames": [
+        "000000004000000001020300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "stats": {
+        "skipped": 0,
+        "dropped": 0,
+        "bad_type": 0,
+        "bad_dlc": 0,
+        "bad_len": 0,
+        "truncated": 0
+      },
+      "error": "",
+      "bad_frame_policy": ""
+    },
+    {
+      "name": "classic and can fd",
+      "stream": "c33c0100000000080000000102030405060708bcc33c02000000004000000001020300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d4",
+      "frames": [
+        "00000000080000000102030405060708",
+        "000000004000000001020300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "stats": {
+        "skipped": 0,
+        "dropped": 0,
+        "bad_type": 0,
+        "bad_dlc": 0,
+        "bad_len": 0,
+        "truncated": 0
+      },
+      "error": "",
+      "bad_frame_policy": ""
+    },
+    {
+      "name": "garbage around frames",
+      "stream": "010203c33c0100000000080000000102030405060708bc010203",
+      "frames": [
+        "00000000080000000102030405060708"
+      ],
+      "stats": {
+        "skipped": 6,
+        "dropped": 0,
+        "bad_type": 0,
+        "bad_dlc": 0,
+        "bad_len": 0,
+        "truncated": 0
+      },
+      "error": "",
+      "bad_frame_policy": ""
+    },
+    {
+      "name": "crc mismatch then valid frame",
+      "stream": "c33c010000000008000000010203040506070843c33c0100000000080000000102030405060708bc",
+      "frames": [
+        "00000000080000000102030405060708"
+      ],
+      "stats": {
+        "skipped": 20,
+        "dropped": 1,
+        "bad_type": 0,
+        "bad_dlc": 0,
+        "bad_len": 0,
+        "truncated": 0
+      },
+      "error": "",
+      "bad_frame_policy": ""
+    },
+    {
+      "name": "unknown type skipped",
+      "stream": "c33c7fc33c0100000000080000000102030405060708bc",
+      "frames": [
+        "00000000080000000102030405060708"
+      ],
+      "stats": {
+        "skipped": 3,
+        "dropped": 0,
+        "bad_type": 1,
+        "bad_dlc": 0,
+        "bad_len": 0,
+        "truncated": 0
+      },
+      "error": "",
+      "bad_frame_policy": ""
+    },
+    {
+      "name": "unknown type fails",
+      "stream": "c33c7fc33c0100000000080000000102030405060708bc",
+      "frames": [],
+      "stats": {
+        "skipped": 0,
+        "dropped": 0,
+        "bad_type": 1,
+        "bad_dlc": 0,
+        "bad_len": 0,
+        "truncated": 0
+      },
+      "error": "ErrBadType",
+      "bad_frame_policy": "fail"
+    },
+    {
+      "name": "bad dlc skipped",
+      "stream": "c33c0100000000090000000000000000000000df",
+      "frames": [],
+      "stats": {
+        "skipped": 20,
+        "dropped": 0,
+        "bad_type": 0,
+        "bad_dlc": 1,
+        "bad_len": 0,
+        "truncated": 0
+      },
+      "error": "",
+      "bad_frame_policy": ""
+    },
+    {
+      "name": "bad dlc fails",
+      "stream": "c33c0100000000090000000000000000000000df",
+      "frames": [],
+      "stats": {
+        "skipped": 0,
+        "dropped": 0,
+        "bad_type": 0,
+        "bad_dlc": 1,
+        "bad_len": 0,
+        "truncated": 0
+      },
+      "error": "ErrBadDLC",
+      "bad_frame_policy": "fail"
+    },
+    {
+      "name": "bad can fd len skipped",
+      "stream": "c33c0200000000410000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000085",
+      "frames": [],
+      "stats": {
+        "skipped": 76,
+        "dropped": 0,
+        "bad_type": 0,
+        "bad_dlc": 0,
+        "bad_len": 1,
+        "truncated": 0
+      },
+      "error": "",
+      "bad_frame_policy": ""
+    },
+    {
+      "name": "bad can fd len fails",
+      "stream": "c33c0200000000410000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000085",
+      "frames": [],
+      "stats": {
+        "skipped": 0,
+        "dropped": 0,
+        "bad_type": 0,
+        "bad_dlc": 0,
+        "bad_len": 1,
+        "truncated": 0
+      },
+      "error": "ErrBadLen",
+      "bad_frame_policy": "fail"
+    },
+    {
+      "name": "truncated classic",
+      "stream": "c33c01000000000800000001020304",
+      "frames": [],
+      "stats": {
+        "skipped": 0,
+        "dropped": 0,
+        "bad_type": 0,
+        "bad_dlc": 0,
+        "bad_len": 0,
+        "truncated": 15
+      },
+      "error": "ErrTruncated",
+      "bad_frame_policy": ""
+    },
+    {
+      "name": "truncated can fd",
+      "stream": "c33c02000000004000000001020300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "frames": [],
+      "stats": {
+        "skipped": 0,
+        "dropped": 0,
+        "bad_type": 0,
+        "bad_dlc": 0,
+        "bad_len": 0,
+        "truncated": 75
+      },
+      "error": "ErrTruncated",
+      "bad_frame_policy": ""
+    },
+    {
+      "name": "long garbage",
+      "stream": "01020304010203040102030401020304010203040102030401020304010203040102030401020304010203040102030401020304010203040102030401020304010203040102030401020304010203040102030401020304010203040102030401020304",
+      "frames": [],
+      "stats": {
+        "skipped": 100,
+        "dropped": 0,
+        "bad_type": 0,
+        "bad_dlc": 0,
+        "bad_len": 0,
+        "truncated": 0
+      },
+      "error": "",
+      "bad_frame_policy": ""
+    }
+  ]
+}
