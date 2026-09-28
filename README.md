@@ -55,7 +55,7 @@ CAN FD frame (`canfd_frame`):
 |---|---|---|
 | 0 | 4 | `can_id` (little-endian) |
 | 4 | 1 | `len` |
-| 5 | 1 | `flags` (`BRS` 0x01, `ESI` 0x02) |
+| 5 | 1 | `flags` (`BRS` 0x01, `ESI` 0x02; the kernel's `CANFD_FDF` 0x04 is accepted on input and ignored) |
 | 6 | 1 | `__res0` (must be zero) |
 | 7 | 1 | `__res1` (must be zero) |
 | 8 | 64 | `data` |
@@ -532,7 +532,8 @@ other length returns `ErrFrameLen`. Strict: `ErrBadDLC`, `ErrBadLen` (CAN FD
 length not encodable in the 4-bit DLC field: only `0..8, 12, 16, 20, 24, 32,
 48, 64` are valid), `ErrReserved` (non-zero padding/reserved bytes),
 `ErrBadFlags` (`FlagRTR` in CAN FD, `FlagEFF` or `FlagRTR` with `FlagERR`,
-unknown bits of the CAN FD flags byte), `ErrBadID` (an identifier that does not
+unknown bits of the CAN FD flags byte; the kernel's `CANFD_FDF` 0x04 is
+accepted and ignored), `ErrBadID` (an identifier that does not
 fit the addressing mode; an error frame carries a 29-bit error class mask in
 `ID` instead of an 11-bit identifier). On error the frame is left unchanged.
 
@@ -795,6 +796,12 @@ including the payload and must not be enabled in production.
 
 See [SECURITY.md](SECURITY.md) for the threat model, the CPU amplification
 note and the deployment checklist. Russian translation: [SECURITY.ru.md](SECURITY.ru.md).
+
+A complete TLS 1.3 server and client with mutual TLS — certificate loading,
+`tls.Config` for both sides and the cantcp codec over the connection — lives
+in [examples/tls](examples/tls/). The OpenSSL commands that generate the
+certificates are in the cantcp documentation (`docs/TLS-KEYS.md` in the
+[cantcp](https://github.com/burn-lab-dev/cantcp) repository).
 
 ## Notes
 
