@@ -136,9 +136,11 @@
 //
 // # Test vectors
 //
-// testdata/vectors.json holds the shared protocol constants: streams, raw
-// frames, field values, counters and errors, so every implementation produces
-// byte-for-byte identical results.
+// The canon of the protocol lives in github.com/burn-lab-dev/cantcp-spec:
+// the specification and vectors.json with streams, raw frames, field values,
+// counters and errors, so every implementation produces byte-for-byte
+// identical results. testdata/vectors.json is a synced copy checked against
+// the canon by scripts/sync_vectors.sh and by the CI.
 //
 // # Errors
 //

@@ -28,6 +28,17 @@ jobs:
       - name: go test -race
         run: go test -race ./...
 
+  canon:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the vectors against the canon
+        run: |
+          scripts/sync_vectors.sh --check \
+            --url https://raw.githubusercontent.com/burn-lab-dev/cantcp-spec/main/vectors.json
+      - name: Verify the local checksum
+        run: (cd testdata && sha256sum -c vectors.sha256)
+
   fuzz:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest

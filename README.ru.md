@@ -791,6 +791,21 @@ fmt.Println(errors.Is(err, cantcp.ErrBadDLC)) // true
 |---|---|---|---|---|---|---|---|---|
 | байт | 0..8 | 12 | 16 | 20 | 24 | 32 | 48 | 64 |
 
+## Тестовые векторы
+
+Канон протокола живёт в
+[cantcp-spec](https://github.com/burn-lab-dev/cantcp-spec): спецификация и
+`vectors.json` с потоками, сырыми кадрами, значениями полей, счётчиками и
+ошибками. Этот репозиторий держит синхронизированную копию в
+`testdata/vectors.json` с хэшем в `testdata/vectors.sha256`; CI падает,
+когда копия расходится с каноном. Обновление и проверка копии:
+
+```sh
+scripts/sync_vectors.sh            # соседний чекаут ../cantcp-spec
+scripts/sync_vectors.sh --url URL  # сырой канон с GitHub
+scripts/sync_vectors.sh --check    # ошибка при расхождении
+```
+
 ## Безопасность
 
 cantcp — транспорт, а не слой безопасности. Он рассчитан на работу **внутри
