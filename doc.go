@@ -29,7 +29,8 @@
 //
 //	can_id  uint32  (4 bytes, little-endian)
 //	len     uint8   (1 byte)
-//	flags   uint8   (1 byte: BRS 0x01, ESI 0x02)
+//	flags   uint8   (1 byte: BRS 0x01, ESI 0x02; the kernel's FD marker
+//	                 CANFD_FDF 0x04 is accepted on input and ignored)
 //	__res0  uint8   (1 byte, must be zero)
 //	__res1  uint8   (1 byte, must be zero)
 //	data    [64]byte
