@@ -171,7 +171,11 @@ func TestFrameUnmarshalBinary(t *testing.T) {
 		{name: "can fd len too big", in: rawFd(0x1, maxFDDataLen+1, 0), wantErr: ErrBadLen},
 		{name: "can fd len not encodable 9", in: rawFd(0x1, 9, 0), wantErr: ErrBadLen},
 		{name: "can fd len not encodable 63", in: rawFd(0x1, 63, 0), wantErr: ErrBadLen},
-		{name: "can fd fdf bit", in: rawFd(0x1, 0, 0x04), wantErr: ErrBadFlags},
+		{
+			name: "can fd fdf bit is accepted",
+			in:   rawFd(0x1, 0, canFDF),
+			want: Frame{ID: 0x1, Type: TypeFd},
+		},
 		{name: "can fd unknown flag bit", in: rawFd(0x1, 0, 0x80), wantErr: ErrBadFlags},
 		{name: "can fd reserved res0", in: fdRes0, wantErr: ErrReserved},
 		{name: "can fd reserved res1", in: fdRes1, wantErr: ErrReserved},

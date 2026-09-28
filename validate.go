@@ -23,7 +23,9 @@ import "encoding/binary"
 //   - CAN_RTR_FLAG is not valid for CAN FD and returns ErrBadFlags;
 //   - classic can_dlc > 8 returns ErrBadDLC;
 //   - a CAN FD len that the 4-bit DLC field cannot encode returns ErrBadLen;
-//   - unknown bits of the CAN FD flags byte return ErrBadFlags;
+//   - unknown bits of the CAN FD flags byte return ErrBadFlags; the kernel's
+//     CANFD_FDF marker (0x04) is accepted and ignored, because Linux sets it
+//     on delivered CAN FD frames;
 //   - non-zero padding and reserved bytes return ErrReserved: __pad, __res0
 //     and len8_dlc for classic, __res0 and __res1 for CAN FD.
 //

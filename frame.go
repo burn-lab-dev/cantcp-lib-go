@@ -36,9 +36,13 @@ const (
 
 // canfd_frame flags byte bits from Linux SocketCAN.
 const (
-	canFDBRS  = 0x01 // CANFD_BRS
-	canFDESI  = 0x02 // CANFD_ESI
-	canFDMask = canFDBRS | canFDESI
+	canFDBRS = 0x01 // CANFD_BRS
+	canFDESI = 0x02 // CANFD_ESI
+	// canFDF is CANFD_FDF: the kernel sets the FD marker when it delivers a
+	// CAN FD frame. The bit is accepted on input and ignored; MarshalBinary
+	// never writes it.
+	canFDF    = 0x04
+	canFDMask = canFDBRS | canFDESI | canFDF
 )
 
 // validFDDataLen reports whether n is a CAN FD data length that can be encoded
@@ -106,7 +110,8 @@ type Frame struct {
 // can_dlc > 8 returns ErrBadDLC, an invalid canfd len (greater than 64 or not
 // encodable in the 4-bit DLC field) returns ErrBadLen, non-zero padding and
 // reserved bytes return ErrReserved, FlagRTR and unknown bits of the CAN FD
-// flags byte return ErrBadFlags, an identifier that does not fit the
+// flags byte (except CANFD_FDF, the kernel's FD marker) return ErrBadFlags, an
+// identifier that does not fit the
 // addressing mode returns ErrBadID (more than 11 bits without FlagEFF, more
 // than 29 bits with it, no silent masking), and FlagEFF or FlagRTR combined
 // with FlagERR returns ErrBadFlags. On success Data is a window into the
