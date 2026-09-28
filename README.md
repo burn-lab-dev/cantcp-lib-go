@@ -783,6 +783,21 @@ tolerant (`len ≤ 64`) for raw pass-through.
 |---|---|---|---|---|---|---|---|---|
 | bytes | 0..8 | 12 | 16 | 20 | 24 | 32 | 48 | 64 |
 
+## Test vectors
+
+The canon of the protocol lives in
+[cantcp-spec](https://github.com/burn-lab-dev/cantcp-spec): the specification
+and `vectors.json` with streams, raw frames, field values, counters and
+errors. This repository keeps a synced copy in `testdata/vectors.json` with
+its hash in `testdata/vectors.sha256`; the CI fails when the copy diverges
+from the canon. Refresh or check the copy with:
+
+```sh
+scripts/sync_vectors.sh            # sibling ../cantcp-spec checkout
+scripts/sync_vectors.sh --url URL  # raw canon from GitHub
+scripts/sync_vectors.sh --check    # fail on a difference
+```
+
 ## Security
 
 cantcp is a transport, not a security layer. It is designed to run **inside a
