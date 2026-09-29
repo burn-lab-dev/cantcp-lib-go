@@ -126,6 +126,7 @@ func FuzzFrameUnmarshal(f *testing.F) {
 	f.Add(rawClassic(0x123, 2, 0xDE, 0xAD))
 	f.Add(rawClassic(canEFFFlag|0x1ABCDE, 8, 1, 2, 3, 4, 5, 6, 7, 8))
 	f.Add(rawFd(0x123, 64, canFDBRS|canFDESI))
+	f.Add(rawFd(0x123, 4, canFDF|canFDBRS, 1, 2, 3, 4))
 	f.Add(rawFd(canEFFFlag|0x1ABCDE, 4, 0, 1, 2, 3, 4))
 	f.Add(make([]byte, 15))
 	f.Add(make([]byte, 73))
@@ -146,10 +147,14 @@ func FuzzFrameUnmarshal(f *testing.F) {
 				t.Fatalf("unexpected error: %v", err)
 			}
 		}
-		// MarshalBinary canonicalizes the data area: bytes beyond the length
-		// field are not part of Data and are written as zeroes.
+		// MarshalBinary canonicalizes the frame: bytes beyond the length
+		// field are not part of Data and are written as zeroes, and the
+		// kernel's CANFD_FDF marker is never written.
 		canonical := bytes.Clone(b)
 		clear(canonical[dataOff+int(canonical[dlcOff]):])
+		if len(canonical) == fdFrameLen {
+			canonical[fdFlagsOff] &^= canFDF
+		}
 		raw, err := f.MarshalBinary()
 		if err != nil {
 			t.Fatalf("MarshalBinary after successful UnmarshalBinary: %v", err)
